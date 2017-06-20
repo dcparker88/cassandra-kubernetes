@@ -14,7 +14,7 @@ spec:
         name: cassandra
     spec:
       containers:
-        - image: vyshane/cassandra
+        - image: dcparker88/cassandra
           name: cassandra
           env:
             - name: PEER_DISCOVERY_SERVICE
