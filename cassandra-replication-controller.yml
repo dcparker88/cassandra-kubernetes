@@ -5,7 +5,7 @@ metadata:
     name: cassandra
   name: cassandra
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     name: cassandra
   template:
@@ -14,12 +14,11 @@ spec:
         name: cassandra
     spec:
       containers:
-        - image: dcparker88/cassandra
+        - image: dcparker88/cassandra:latest
           name: cassandra
           env:
             - name: PEER_DISCOVERY_SERVICE
               value: cassandra-peers
-
             # Feel free to change the following:
             - name: CASSANDRA_CLUSTER_NAME
               value: Cassandra
@@ -29,7 +28,24 @@ spec:
               value: Kubernetes Cluster
             - name: CASSANDRA_ENDPOINT_SNITCH
               value: GossipingPropertyFileSnitch
+          resources:
+            limits:
+              cpu: "4"
+              memory: 10Gi
+            requests:
+             cpu: "4"
+             memory: 10Gi
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                - /bin/sh
+                - -c
+                - nodetool decommission
+          terminationGracePeriodSeconds: 300
           ports:
+            - containerPort: 7199
+              name: jmx
             - containerPort: 9042
               name: cql
           volumeMounts:

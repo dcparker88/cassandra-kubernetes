@@ -7,6 +7,9 @@ RUN apt-get -qq update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
+RUN sed -i 's/authenticator:.*/authenticator: PasswordAuthenticator/' /etc/cassandra/cassandra.yaml
+RUN sed -i 's/authorizer:.*/authorizer: CassandraAuthorizer/' /etc/cassandra/cassandra.yaml
+
 COPY custom-entrypoint.sh /
 ENTRYPOINT ["/custom-entrypoint.sh"]
 CMD ["cassandra", "-f"]
