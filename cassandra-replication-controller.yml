@@ -13,6 +13,7 @@ spec:
       labels:
         name: cassandra
     spec:
+      terminationGracePeriodSeconds: 300
       containers:
         - image: dcparker88/cassandra:latest
           name: cassandra
@@ -42,7 +43,6 @@ spec:
                 - /bin/sh
                 - -c
                 - nodetool decommission
-          terminationGracePeriodSeconds: 300
           ports:
             - containerPort: 7199
               name: jmx
