@@ -5,7 +5,7 @@ metadata:
     name: cassandra
   name: cassandra
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     name: cassandra
   template:
@@ -15,12 +15,11 @@ spec:
     spec:
       terminationGracePeriodSeconds: 300
       containers:
-        - image: dcparker88/cassandra:latest
+        - image: dcparker88/cassandra:auth3.11.0
           name: cassandra
           env:
             - name: PEER_DISCOVERY_SERVICE
               value: cassandra-peers
-            # Feel free to change the following:
             - name: CASSANDRA_CLUSTER_NAME
               value: Cassandra
             - name: CASSANDRA_DC
