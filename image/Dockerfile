@@ -26,6 +26,10 @@ RUN sed -i 's/jmxremote.authenticate=true*/jmxremote.authenticate=false/' /etc/c
 ENV STORE_HOSTNAME cassandra.store9401.api.target.com
 RUN echo "JVM_OPTS=\"\$JVM_OPTS -Djava.rmi.server.hostname=$STORE_HOSTNAME\"" >> /etc/cassandra/cassandra-env.sh
 
+# set up the metrics output
+COPY cassandra-metrics.yaml /etc/cassandra/cassandra-metrics.yaml
+RUN echo "JVM_OPTS=\"\$JVM_OPTS -Dcassandra.metricsReporterConfigFile=cassandra-metrics.yaml\"" >> /etc/cassandra/cassandra-env.sh
+
 COPY custom-entrypoint.sh /
 ENTRYPOINT ["/custom-entrypoint.sh"]
 CMD ["cassandra", "-f"]

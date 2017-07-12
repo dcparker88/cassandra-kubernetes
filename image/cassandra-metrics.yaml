@@ -1,0 +1,22 @@
+---
+graphite:
+- timeunit: SECONDS
+  hosts:
+  - host: telegraf-svc.kube-system
+    port: 2003
+  prefix: HOSTNAME.store.cassandra
+  period: 60
+  predicate:
+    color: white
+    useQualifiedName: true
+    patterns:
+    - ^org.apache.cassandra.metrics.Cache.+
+    - ^org.apache.cassandra.metrics.ClientRequest.+
+    - ^org.apache.cassandra.metrics.CommitLog.+
+    - ^org.apache.cassandra.metrics.Compaction.+
+    - ^org.apache.cassandra.metrics.Connection.+
+    - ^org.apache.cassandra.metrics.DroppedMessage.+
+    - ^org.apache.cassandra.metrics.Streaming.+
+    - ^org.apache.cassandra.metrics.Storage.+
+    - ^org.apache.cassandra.metrics.ThreadPools.+
+    - ^org.apache.cassandra.metrics.ColumnFamily.bumblebee.+

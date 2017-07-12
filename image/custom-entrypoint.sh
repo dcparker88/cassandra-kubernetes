@@ -6,6 +6,7 @@
 sleep 5
 
 my_ip=$(hostname --ip-address)
+my_hostname=$(hostname)
 
 CASSANDRA_SEEDS=$(host $PEER_DISCOVERY_SERVICE | \
     grep -v "not found" | \
@@ -19,5 +20,8 @@ CASSANDRA_SEEDS=$(host $PEER_DISCOVERY_SERVICE | \
 if [ ! -z "$CASSANDRA_SEEDS" ]; then
     export CASSANDRA_SEEDS
 fi
+
+# set the hostname in the metrics file
+sed -i "s/HOSTNAME/$my_hostname/" /etc/cassandra/cassandra-metrics.yaml
 
 /docker-entrypoint.sh "$@"
