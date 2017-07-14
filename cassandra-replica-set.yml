@@ -1,0 +1,79 @@
+apiVersion: extensions/v1beta1
+kind: ReplicaSet
+metadata:
+  labels:
+    app: cassandra
+    cassandra-node1-v000: "true"
+    cluster: cassandra-node1
+    load-balancer-cassandra: "true"
+    replication-controller: cassandra-node1-v000
+    stack: node1
+    version: "0"
+  name: cassandra-node1-v000
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cassandra
+      cassandra-node1-v000: "true"
+      cluster: cassandra-node1
+      replication-controller: cassandra-node1-v000
+      stack: node1
+      version: "0"
+  template:
+    metadata:
+      labels:
+        app: cassandra
+        cassandra-node1-v000: "true"
+        cluster: cassandra-node1
+        load-balancer-cassandra: "true"
+        replication-controller: cassandra-node1-v000
+        stack: node1
+        version: "0"
+    spec:
+      containers:
+      - env:
+        - name: PEER_DISCOVERY_SERVICE
+          value: cassandra-peers
+        - name: CASSANDRA_CLUSTER_NAME
+          value: Cassandra
+        - name: CASSANDRA_DC
+          value: DC1
+        - name: CASSANDRA_RACK
+          value: Kubernetes Cluster
+        - name: CASSANDRA_ENDPOINT_SNITCH
+          value: GossipingPropertyFileSnitch
+        - name: STORE_NAME
+          value: T0693
+        image: cloudreadyref.docker.target.com/cassandra:auth3.11.0.2
+        imagePullPolicy: IfNotPresent
+        name: cassandra-node1
+        ports:
+        - containerPort: 7000
+          name: intra-node
+          protocol: TCP
+        - containerPort: 7001
+          name: tls-intra-node
+          protocol: TCP
+        - containerPort: 9042
+          name: cql
+          protocol: TCP
+        - containerPort: 7199
+          name: jmx
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        volumeMounts:
+        - mountPath: /var/lib/cassandra/data
+          name: cassandradata
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+      - name: shashis-javaref
+      restartPolicy: Always
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - hostPath:
+          path: /mnt/nfs/cassandra/data00
+        name: cassandradata

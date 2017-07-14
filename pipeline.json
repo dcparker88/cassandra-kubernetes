@@ -37,10 +37,10 @@
               ],
               "imageDescription": {
                 "account": "cloudreadyref",
-                "imageId": "cloudreadyref.docker.target.com/cassandra",
+                "imageId": "cloudreadyref.docker.target.com/cassandra:auth3.11.0.2",
                 "registry": "cloudreadyref.docker.target.com",
                 "repository": "cassandra",
-                "tag": "auth3.11.0"
+                "tag": "auth3.11.0.2"
               },
               "imagePullPolicy": "IFNOTPRESENT",
               "name": "cassandra-node1",
@@ -71,7 +71,6 @@
               ]
             }
           ],
-          "credentials": "ts-env-0",
           "deployment": {
             "deploymentStrategy": {
               "rollingUpdate": {
@@ -84,9 +83,7 @@
             "minReadySeconds": 0
           },
           "interestingHealthProviderNames": [],
-          "loadBalancers": [
-            "cassandra"
-          ],
+          "loadBalancers": [],
           "namespace": "default",
           "nodeSelector": {},
           "podAnnotations": {},
@@ -102,209 +99,7 @@
           "volumeSources": [
             {
               "hostPath": {
-                "path": "/mnt/nfs/cassandra/node1"
-              },
-              "name": "cassandradata",
-              "type": "HOSTPATH"
-            }
-          ]
-        },
-        {
-          "account": "ts-env-0",
-          "application": "cassandra",
-          "cloudProvider": "stores",
-          "containers": [
-            {
-              "envVars": [
-                {
-                  "name": "PEER_DISCOVERY_SERVICE",
-                  "value": "cassandra-peers"
-                },
-                {
-                  "name": "CASSANDRA_CLUSTER_NAME",
-                  "value": "Cassandra"
-                },
-                {
-                  "name": "CASSANDRA_DC",
-                  "value": "DC1"
-                },
-                {
-                  "name": "CASSANDRA_RACK",
-                  "value": "Kubernetes Cluster"
-                },
-                {
-                  "name": "CASSANDRA_ENDPOINT_SNITCH",
-                  "value": "GossipingPropertyFileSnitch"
-                }
-              ],
-              "imageDescription": {
-                "account": "cloudreadyref",
-                "imageId": "cloudreadyref.docker.target.com/cassandra",
-                "registry": "cloudreadyref.docker.target.com",
-                "repository": "cassandra",
-                "tag": "auth3.11.0"
-              },
-              "imagePullPolicy": "IFNOTPRESENT",
-              "name": "cassandra-node2",
-              "ports": [
-                {
-                  "containerPort": 7000,
-                  "name": "intra-node"
-                },
-                {
-                  "containerPort": 7001,
-                  "name": "tls-intra-node"
-                },
-                {
-                  "containerPort": 9042,
-                  "name": "cql"
-                },
-                {
-                  "containerPort": 7199,
-                  "name": "jmx"
-                }
-              ],
-              "volumeMounts": [
-                {
-                  "mountPath": "/var/lib/cassandra/data",
-                  "name": "cassandradata",
-                  "readOnly": false
-                }
-              ]
-            }
-          ],
-          "credentials": "ts-env-0",
-          "deployment": {
-            "deploymentStrategy": {
-              "rollingUpdate": {
-                "maxSurge": 1,
-                "maxUnavailable": 1
-              },
-              "type": "RollingUpdate"
-            },
-            "enabled": false,
-            "minReadySeconds": 0
-          },
-          "interestingHealthProviderNames": [],
-          "loadBalancers": [
-            "cassandra"
-          ],
-          "namespace": "default",
-          "nodeSelector": {},
-          "podAnnotations": {},
-          "region": "default",
-          "replicaSetAnnotations": {},
-          "stack": "node2",
-          "strategy": "",
-          "targetSize": 1,
-          "type": "createServerGroup",
-          "useAutoscaler": false,
-          "user": "[anonymous]",
-          "volumeSources": [
-            {
-              "hostPath": {
-                "path": "/mnt/nfs/cassandra/node2"
-              },
-              "name": "cassandradata",
-              "type": "HOSTPATH"
-            }
-          ]
-        },
-        {
-          "account": "ts-env-0",
-          "application": "cassandra",
-          "cloudProvider": "stores",
-          "containers": [
-            {
-              "envVars": [
-                {
-                  "name": "PEER_DISCOVERY_SERVICE",
-                  "value": "cassandra-peers"
-                },
-                {
-                  "name": "CASSANDRA_CLUSTER_NAME",
-                  "value": "Cassandra"
-                },
-                {
-                  "name": "CASSANDRA_DC",
-                  "value": "DC1"
-                },
-                {
-                  "name": "CASSANDRA_RACK",
-                  "value": "Kubernetes Cluster"
-                },
-                {
-                  "name": "CASSANDRA_ENDPOINT_SNITCH",
-                  "value": "GossipingPropertyFileSnitch"
-                }
-              ],
-              "imageDescription": {
-                "account": "cloudreadyref",
-                "imageId": "cloudreadyref.docker.target.com/cassandra",
-                "registry": "cloudreadyref.docker.target.com",
-                "repository": "cassandra",
-                "tag": "auth3.11.0"
-              },
-              "imagePullPolicy": "IFNOTPRESENT",
-              "name": "cassandra-node3",
-              "ports": [
-                {
-                  "containerPort": 7000,
-                  "name": "intra-node"
-                },
-                {
-                  "containerPort": 7001,
-                  "name": "tls-intra-node"
-                },
-                {
-                  "containerPort": 9042,
-                  "name": "cql"
-                },
-                {
-                  "containerPort": 7199,
-                  "name": "jmx"
-                }
-              ],
-              "volumeMounts": [
-                {
-                  "mountPath": "/var/lib/cassandra/data",
-                  "name": "cassandradata",
-                  "readOnly": false
-                }
-              ]
-            }
-          ],
-          "credentials": "ts-env-0",
-          "deployment": {
-            "deploymentStrategy": {
-              "rollingUpdate": {
-                "maxSurge": 1,
-                "maxUnavailable": 1
-              },
-              "type": "RollingUpdate"
-            },
-            "enabled": false,
-            "minReadySeconds": 0
-          },
-          "interestingHealthProviderNames": [],
-          "loadBalancers": [
-            "cassandra"
-          ],
-          "namespace": "default",
-          "nodeSelector": {},
-          "podAnnotations": {},
-          "region": "default",
-          "replicaSetAnnotations": {},
-          "stack": "node3",
-          "strategy": "",
-          "targetSize": 1,
-          "type": "createServerGroup",
-          "useAutoscaler": false,
-          "user": "[anonymous]",
-          "volumeSources": [
-            {
-              "hostPath": {
-                "path": "/mnt/nfs/cassandra/node3"
+                "path": "/mnt/nfs/cassandra/data00"
               },
               "name": "cassandradata",
               "type": "HOSTPATH"
