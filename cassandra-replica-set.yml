@@ -63,13 +63,10 @@ spec:
           name: jmx
           protocol: TCP
         resources: {}
-        terminationMessagePath: /dev/termination-log
         volumeMounts:
         - mountPath: /var/lib/cassandra/data
           name: cassandradata
-      dnsPolicy: ClusterFirst
-      imagePullSecrets:
-      - name: shashis-javaref
+          readOnly: false
       restartPolicy: Always
       securityContext: {}
       terminationGracePeriodSeconds: 30

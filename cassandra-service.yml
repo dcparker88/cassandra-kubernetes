@@ -1,14 +1,16 @@
-apiVersion: v1
 kind: Service
 metadata:
-  labels:
-    name: cassandra
   name: cassandra
+  namespace: default
 spec:
   ports:
-    - port: 9042
-      name: cql
-    - port: 7199
-      name: jmx
+  - name: cql
+    port: 9042
+    protocol: TCP
+    targetPort: 9042
   selector:
-    name: cassandra
+    load-balancer-cassandra: "true"
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}
