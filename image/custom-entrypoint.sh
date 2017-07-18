@@ -25,6 +25,8 @@ fi
 sed -i "s/HOSTNAME/$my_hostname/" /etc/cassandra/cassandra-metrics.yaml
 
 # set the hostname of the store to get JMX working
-RUN echo "JVM_OPTS=\"\$JVM_OPTS -Djava.rmi.server.hostname=$STORE_NAME\"" >> /etc/cassandra/cassandra-env.sh
+echo "JVM_OPTS=\"\$JVM_OPTS -Djava.rmi.server.hostname=$STORE_NAME\"" >> /etc/cassandra/cassandra-env.sh
+
+# replace the jmx config file with the vault username and password env variables
 
 /docker-entrypoint.sh "$@"

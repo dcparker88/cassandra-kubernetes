@@ -17,9 +17,17 @@ RUN sed -i 's/authorizer:.*/authorizer: CassandraAuthorizer/' /etc/cassandra/cas
 # set to "no" to allow remote nodetool.
 ENV LOCAL_JMX no
 
-# turn off remote password for nodetool, temporarily
-# not sure how to manage this in the long-term, vault maybe?
-RUN sed -i 's/jmxremote.authenticate=true*/jmxremote.authenticate=false/' /etc/cassandra/cassandra-env.sh
+# enable nodetool security to work with cassandra internal auth
+# http://docs.datastax.com/en/cassandra/3.0/cassandra/configuration/secureJmxAuthentication.html?hl=jmx
+RUN echo "JVM_OPTS=\"\$JVM_OPTS -Dcassandra.jmx.remote.login.config=CassandraLogin\"" >> /etc/cassandra/cassandra-env.sh
+RUN echo "JVM_OPTS=\"\$JVM_OPTS -Djava.security.auth.login.config=/etc/cassandra/cassandra-jaas.config\"" >> /etc/cassandra/cassandra-env.sh
+RUN echo "JVM_OPTS=\"\$JVM_OPTS -Dcassandra.jmx.authorizer=org.apache.cassandra.auth.jmx.AuthorizationProxy\"" >> /etc/cassandra/cassandra-env.sh
+
+# remove the jmxremote.password line because we don't want to use that
+RUN sed -i '/jmxremote.password/d' /etc/cassandra/cassandra-env.sh
+
+# copy in the cassandra nodetool password config file because the docker image doesn't have it
+COPY cassandra-jaas.config /etc/cassandra/cassandra-jaas.config
 
 # set up the metrics output
 COPY cassandra-metrics.yaml /etc/cassandra/cassandra-metrics.yaml
